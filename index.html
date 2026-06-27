@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="한일로보틱스 - Physical AI 기반 자율 용접 로봇 솔루션" />
+  <title>HANIL ROBOTICS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@300;400;500&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black:  #07080a;
+      --dark:   #0d0f14;
+      --panel:  #111318;
+      --border: rgba(255,255,255,0.07);
+      --white:  #f0f2f5;
+      --muted:  rgba(240,242,245,0.42);
+      --blue:   #3e7cd2;
+      --blue2:  #2a5faa;
+      --body:   'Inter', 'Noto Sans KR', sans-serif;
+      --logo:   'Rajdhani', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: var(--body); -webkit-font-smoothing: antialiased; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 52px; height: 68px;
+      background: rgba(7,8,10,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--logo); font-weight: 700; font-size: 1.2rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: #3e7cd2; text-decoration: none;
+    }
+    .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+    .nav-links a {
+      font-size: 0.78rem; font-weight: 400; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--muted); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .lang-btn {
+      background: none; border: 1px solid var(--border);
+      color: var(--muted); font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.1em; padding: 5px 0; width: 44px; text-align: center;
+      border-radius: 1px; cursor: pointer; transition: all 0.2s;
+    }
+    .lang-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* ── HERO ── */
+    #hero {
+      height: 100vh; position: relative; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    /* 이미지 placeholder — 나중에 src만 교체하세요 */
+    .hero-img {
+      position: absolute; inset: 0;
+      background: var(--black);
+      /* 사진 넣을 때: background: url('hero.jpg') center/cover no-repeat; */
+    }
+    .hero-img::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(7,8,10,0.15) 0%,
+        rgba(7,8,10,0.3) 40%,
+        rgba(7,8,10,0.85) 75%,
+        rgba(7,8,10,1) 100%
+      );
+    }
+    /* placeholder 텍스트 */
+    .hero-img-label {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(255,255,255,0.12); z-index: 1;
+      border: 1px dashed rgba(255,255,255,0.07); margin: 80px 52px;
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 0 52px 80px;
+    }
+    .hero-tag {
+      display: inline-block; margin-bottom: 22px;
+      font-size: 0.68rem; font-weight: 500; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--blue);
+      border: 1px solid rgba(62,124,210,0.35);
+      padding: 5px 14px; border-radius: 1px;
+    }
+    .hero-title {
+      font-family: var(--logo); font-weight: 700;
+      font-size: clamp(2.8rem, 6.5vw, 5.8rem);
+      line-height: 1.0; letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .hero-title em { font-style: normal; color: var(--blue); }
+    .hero-sub {
+      margin-top: 24px; max-width: 500px;
+      font-size: 0.95rem; font-weight: 300; color: var(--muted);
+      line-height: 1.8;
+    }
+    .hero-cta { margin-top: 40px; display: flex; gap: 14px; align-items: center; }
+    .btn-primary {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 200px; padding: 13px 32px;
+      background: var(--blue); color: #fff;
+      font-size: 0.78rem; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; text-decoration: none;
+      border-radius: 1px; transition: background 0.2s;
+    }
+    .btn-primary:hover { background: var(--blue2); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 200px; padding: 13px 32px;
+      border: 1px solid rgba(255,255,255,0.18); color: var(--muted);
+      font-size: 0.78rem; font-weight: 400; letter-spacing: 0.1em;
+      text-transform: uppercase; text-decoration: none;
+      border-radius: 1px; transition: all 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--white); color: var(--white); }
+    .hero-scroll {
+      position: absolute; right: 52px; bottom: 40px; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .hero-scroll span {
+      font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, var(--blue), transparent);
+      animation: scrollpulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollpulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.15); }
+    }
+
+    /* ── SHARED ── */
+    .section-wrap { padding: 120px 52px; }
+    .section-label {
+      font-size: 0.65rem; font-weight: 500; letter-spacing: 0.24em;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 14px;
+    }
+    .section-title {
+      font-family: var(--logo); font-weight: 700;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      letter-spacing: 0.04em; text-transform: uppercase; line-height: 1.1;
+    }
+    .divider { width: 100%; height: 1px; background: var(--border); }
+
+    /* ── ABOUT ── */
+    #about { background: var(--dark); }
+    .about-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 100px; margin-top: 64px; align-items: start;
+    }
+    .about-desc {
+      font-size: 0.95rem; font-weight: 300; color: var(--muted);
+      line-height: 1.9;
+    }
+    .about-desc p + p { margin-top: 20px; }
+    .stats {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: var(--border);
+    }
+    .stat {
+      background: var(--panel); padding: 36px 28px;
+    }
+    .stat-num {
+      font-family: var(--logo); font-weight: 700;
+      font-size: 1.6rem; color: var(--blue); line-height: 1;
+      letter-spacing: 0.02em;
+    }
+    .stat-unit { font-size: 0.9rem; font-weight: 600; margin-left: 2px; }
+    .stat-label {
+      font-size: 0.75rem; color: var(--muted);
+      margin-top: 10px; line-height: 1.5; letter-spacing: 0.02em;
+    }
+
+    /* ── SOLUTION ── */
+    #solution { background: var(--black); }
+    /* 이미지 placeholder */
+    .sol-visual {
+      width: 100%; aspect-ratio: 16/7;
+      background: var(--panel);
+      border: 1px dashed rgba(255,255,255,0.07);
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 64px; margin-bottom: 64px;
+      /* 사진 넣을 때: background: url('solution.jpg') center/cover no-repeat; */
+    }
+    .sol-visual span {
+      font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(255,255,255,0.1);
+    }
+    .sol-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border);
+    }
+    .sol-card {
+      background: var(--panel); padding: 52px 44px;
+      position: relative; overflow: hidden; transition: background 0.25s;
+    }
+    .sol-card:hover { background: #161820; }
+    .sol-card::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--blue); transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .sol-card:hover::after { transform: scaleX(1); }
+    .sol-num {
+      font-family: var(--logo); font-weight: 700;
+      font-size: 1.5rem; letter-spacing: 0.05em;
+      color: var(--blue); margin-bottom: 28px; opacity: 0.85;
+    }
+    .sol-title {
+      font-family: var(--logo); font-weight: 700; font-size: 1.6rem;
+      letter-spacing: 0.02em; text-transform: uppercase;
+      margin-bottom: 20px; line-height: 1.2; color: var(--white);
+    }
+    .sol-desc {
+      font-size: 0.98rem; color: rgba(240,242,245,0.62); line-height: 1.75; font-weight: 300;
+    }
+
+    /* ── HISTORY ── */
+    #awards { background: var(--dark); }
+    .history-layout {
+      display: grid; grid-template-columns: 1fr 2fr;
+      gap: 100px; margin-top: 64px; align-items: start;
+    }
+    .history-intro {
+      font-size: 0.88rem; color: var(--muted); line-height: 1.9; font-weight: 300;
+      position: sticky; top: 100px;
+    }
+    .timeline { position: relative; padding-left: 24px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 0; top: 8px; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--blue) 0%, rgba(62,124,210,0.1) 100%);
+    }
+    .tl-item { position: relative; padding: 0 0 28px 36px; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-dot {
+      position: absolute; left: -5px; top: 7px;
+      width: 11px; height: 11px; border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 12px 3px rgba(62,124,210,0.4);
+    }
+    .tl-dot.future {
+      background: transparent;
+      border: 1px solid var(--blue);
+      box-shadow: none;
+    }
+    .tl-yeargroup { font-family: var(--logo); font-weight: 700;
+      font-size: 2.6rem; line-height: 1; letter-spacing: 0.02em;
+      color: var(--blue); margin-bottom: 32px;
+    }
+    .tl-month {
+      font-family: var(--logo); font-weight: 700;
+      font-size: 1.1rem; color: var(--blue); opacity: 0.85;
+      min-width: 42px; flex-shrink: 0;
+    }
+    .tl-row { display: flex; gap: 18px; align-items: baseline; }
+    .tl-title {
+      font-family: var(--logo); font-weight: 700; font-size: 1.05rem;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      line-height: 1.3;
+    }
+    .tl-desc {
+      font-size: 0.82rem; color: var(--muted); line-height: 1.8; font-weight: 300;
+    }
+    .tl-badge {
+      display: inline-block; margin-top: 12px;
+      font-size: 0.62rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--blue);
+      border: 1px solid rgba(62,124,210,0.3); padding: 3px 10px; border-radius: 1px;
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--black); }
+    .contact-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 100px; margin-top: 64px; align-items: start;
+    }
+    .contact-lead {
+      font-size: 0.95rem; color: var(--muted); line-height: 1.9; font-weight: 300;
+      margin-bottom: 40px;
+    }
+    .contact-rows { display: flex; flex-direction: column; gap: 18px; }
+    .contact-row { display: flex; gap: 20px; }
+    .contact-key {
+      width: 72px; flex-shrink: 0;
+      font-size: 0.62rem; font-weight: 500; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--blue); padding-top: 2px;
+    }
+    .contact-val { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+    .contact-val a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .contact-val a:hover { color: var(--white); }
+    /* 오른쪽 — 회사 로고 대형 */
+    .contact-brand {
+      display: flex; align-items: flex-end; justify-content: flex-end;
+      height: 100%; padding-bottom: 4px;
+    }
+    .contact-brand-text {
+      font-family: var(--logo); font-weight: 700;
+      font-size: clamp(2rem, 5vw, 4rem);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(62,124,210,0.15); line-height: 1;
+      user-select: none;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      padding: 56px 52px 64px;
+    }
+    .footer-top {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 24px; border-bottom: 1px solid var(--border);
+    }
+    .footer-links { display: flex; gap: 32px; list-style: none; }
+    .footer-links a {
+      font-size: 0.85rem; color: var(--white); text-decoration: none;
+      font-weight: 400; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--blue); }
+    .footer-loc {
+      display: flex; align-items: center; gap: 14px;
+      margin-top: 28px;
+    }
+    .footer-loc-place {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.85rem; font-weight: 500; color: var(--white);
+    }
+    .footer-copy {
+      font-size: 0.82rem; color: var(--muted); letter-spacing: 0.01em;
+    }
+    .footer-info {
+      margin-top: 24px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .footer-info-row {
+      font-size: 0.82rem; color: var(--muted); line-height: 1.6;
+    }
+    .footer-info-row a { color: var(--muted); text-decoration: none; }
+    .footer-info-row a:hover { color: var(--white); }
+    .footer-bottom {
+      margin-top: 44px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: var(--logo); font-weight: 700; font-size: 1.4rem;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue);
+    }
+    .footer-top-btn {
+      width: 64px; height: 64px; border-radius: 50%;
+      border: 1px solid var(--border); background: transparent;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; cursor: pointer; transition: all 0.25s;
+      color: var(--white); text-decoration: none;
+    }
+    .footer-top-btn:hover { border-color: var(--blue); background: rgba(62,124,210,0.08); }
+    .footer-top-btn .arrow { font-size: 1rem; line-height: 1; }
+    .footer-top-btn .txt { font-size: 0.6rem; letter-spacing: 0.12em; }
+
+    /* ── LANG ── */
+    [data-lang] { display: none; }
+    .lang-ko [data-lang="ko"] { display: block; }
+    .lang-en [data-lang="en"] { display: block; }
+    .lang-ko [data-lang="ko"].i { display: inline; }
+    .lang-en [data-lang="en"].i { display: inline; }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.on { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .section-wrap { padding: 80px 24px; }
+      .hero-content { padding: 0 24px 64px; }
+      .about-layout, .history-layout, .contact-layout { grid-template-columns: 1fr; gap: 48px; }
+      .sol-grid { grid-template-columns: 1fr; }
+      footer { padding: 48px 24px 56px; }
+      .footer-links { gap: 20px; flex-wrap: wrap; }
+      .footer-top { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .footer-loc { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .hero-scroll { display: none; }
+      .history-intro { position: static; }
+    }
+  </style>
+</head>
+<body class="lang-ko">
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">HANIL ROBOTICS</a>
+  <ul class="nav-links">
+    <li><a href="#about"><span data-lang="ko" class="i">소개</span><span data-lang="en" class="i">About</span></a></li>
+    <li><a href="#solution"><span data-lang="ko" class="i">솔루션</span><span data-lang="en" class="i">Solution</span></a></li>
+    <li><a href="#awards"><span data-lang="ko" class="i">연혁</span><span data-lang="en" class="i">History</span></a></li>
+    <li><a href="#contact"><span data-lang="ko" class="i">문의</span><span data-lang="en" class="i">Contact</span></a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="lang-btn" id="langToggle">EN</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-img">
+    <!-- 사진 넣을 때: <img> 태그 넣거나 위 CSS에서 background-image 추가 -->
+    <div class="hero-img-label">Hero Image — 로봇/용접 사진으로 교체</div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-tag">Physical AI · Autonomous Welding</div>
+    <h1 class="hero-title">
+      <span data-lang="ko">용접 로봇이<br /><em>스스로</em> 생각한다</span>
+      <span data-lang="en">Welding Robots<br />That <em>Think</em></span>
+    </h1>
+    <p class="hero-sub">
+      <span data-lang="ko">3D 비전 기반 자율 경로 생성과 실시간 심 트래킹으로<br />조선·중공업 현장의 자동화를 실현합니다.</span>
+      <span data-lang="en">Autonomous path generation and real-time seam tracking for shipbuilding and heavy industry.</span>
+    </p>
+    <div class="hero-cta">
+      <a href="#solution" class="btn-primary"><span data-lang="ko" class="i">솔루션 보기</span><span data-lang="en" class="i">Our Solution</span></a>
+      <a href="#contact" class="btn-ghost"><span data-lang="ko" class="i">도입 문의</span><span data-lang="en" class="i">Contact Us</span></a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="section-label">About</div>
+      <h2 class="section-title">
+        <span data-lang="ko">사람이 가기 어려운 곳,<br />로봇이 대신합니다</span>
+        <span data-lang="en">Where humans can't reach,<br />our robots go</span>
+      </h2>
+    </div>
+    <div class="about-layout reveal">
+      <div class="about-desc">
+        <span data-lang="ko">
+          <p>한일로보틱스는 Physical AI 기반 자율 제조공정 로봇 솔루션을 개발합니다. 3D 비전과 실시간 용접 심 트래킹 기술을 결합해 별도의 티칭 없이 로봇이 스스로 용접 경로를 생성하고 실행합니다.</p>
+          <p>용접·그라인딩·코팅 공정 전반에 적용 가능한 플랫폼을 구축하며, RaaS 모델로 현장 자동화의 진입 장벽을 낮춥니다.</p>
+        </span>
+        <span data-lang="en">
+          <p>Hanilrobotics develops Physical AI-based autonomous manufacturing robot solutions. By combining 3D vision with real-time seam tracking, our robots autonomously generate and execute welding paths without manual teaching.</p>
+          <p>We build a platform for welding, grinding, and coating, delivered via RaaS to lower the barrier to factory automation.</p>
+        </span>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-num">±0.5<span class="stat-unit">mm</span></div>
+          <div class="stat-label"><span data-lang="ko">실시간 심 트래킹 정밀도</span><span data-lang="en">Seam tracking accuracy</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">7<span class="stat-unit"><span data-lang="ko">축</span><span data-lang="en">DOF</span></span></div>
+          <div class="stat-label"><span data-lang="ko">자체 개발 용접 로봇 암</span><span data-lang="en">In-house welding arm</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">3D</div>
+          <div class="stat-label"><span data-lang="ko">비전 기반 자율 경로 생성</span><span data-lang="en">Vision-based path generation</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">RaaS</div>
+          <div class="stat-label"><span data-lang="ko">서비스형 로봇 비즈니스 모델</span><span data-lang="en">Robot-as-a-Service model</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="section-label">Solution</div>
+      <h2 class="section-title">
+        <span data-lang="ko">핵심 기술</span>
+        <span data-lang="en">Core Technology</span>
+      </h2>
+    </div>
+    <!-- 사진 placeholder -->
+    <div class="sol-visual reveal">
+      <span>Solution Image — 용접 로봇 작동 사진으로 교체</span>
+    </div>
+    <div class="sol-grid reveal">
+      <div class="sol-card">
+        <div class="sol-num">01</div>
+        <div class="sol-title"><span data-lang="ko">3D 비전<br />자율 경로 생성</span><span data-lang="en">3D Vision<br />Path Generation</span></div>
+        <div class="sol-desc">
+          <span data-lang="ko">3D 포인트 클라우드에서 용접 심을 자동 검출하고 최적 경로를 생성합니다. 사전 CAD 데이터 없이 현장에서 즉시 작동합니다.</span>
+          <span data-lang="en">Automatically detects weld seams from 3D point clouds and generates optimal paths — no CAD data required.</span>
+        </div>
+      </div>
+      <div class="sol-card">
+        <div class="sol-num">02</div>
+        <div class="sol-title"><span data-lang="ko">실시간<br />심 트래킹</span><span data-lang="en">Real-time<br />Seam Tracking</span></div>
+        <div class="sol-desc">
+          <span data-lang="ko">용접 중 열변형과 자재 오차를 실시간으로 보정합니다. QDD 액추에이터와 비전 피드백의 결합으로 안정적인 용접 품질을 유지합니다.</span>
+          <span data-lang="en">Corrects thermal distortion and material tolerances in real time via QDD actuators and vision feedback.</span>
+        </div>
+      </div>
+      <div class="sol-card">
+        <div class="sol-num">03</div>
+        <div class="sol-title"><span data-lang="ko">RaaS<br />배포 모델</span><span data-lang="en">RaaS<br />Deployment</span></div>
+        <div class="sol-desc">
+          <span data-lang="ko">초기 설비 투자 없이 월정액으로 용접 자동화를 도입합니다. 원격 모니터링 및 지속적 업데이트를 제공합니다.</span>
+          <span data-lang="en">Adopt welding automation via monthly subscription with no upfront capex. Includes remote monitoring and continuous updates.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HISTORY -->
+<section id="awards">
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="section-label">History</div>
+      <h2 class="section-title">
+        <span data-lang="ko">연혁</span>
+        <span data-lang="en">Milestones</span>
+      </h2>
+    </div>
+    <div class="history-layout reveal">
+      <div class="history-intro">
+        <span data-lang="ko">기술 개발부터 법인 설립까지, 한일로보틱스의 주요 발자취입니다.</span>
+        <span data-lang="en">From R&amp;D to incorporation — the key milestones of Hanilrobotics.</span>
+      </div>
+      <div class="timeline">
+        <div class="tl-yeargroup">2026</div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-row">
+            <span class="tl-month">04</span>
+            <span class="tl-title"><span data-lang="ko">KIMST 블루스타트업 선정</span><span data-lang="en">KIMST Blue Startup Selected</span></span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-row">
+            <span class="tl-month">06</span>
+            <span class="tl-title"><span data-lang="ko">주식회사 한일로보틱스 설립</span><span data-lang="en">Hanilrobotics Co., Ltd. Founded</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-top">
+    <ul class="footer-links">
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#about"><span data-lang="ko" class="i">소개</span><span data-lang="en" class="i">About</span></a></li>
+      <li><a href="#solution"><span data-lang="ko" class="i">솔루션</span><span data-lang="en" class="i">Solution</span></a></li>
+      <li><a href="#awards"><span data-lang="ko" class="i">연혁</span><span data-lang="en" class="i">History</span></a></li>
+    </ul>
+  </div>
+
+  <div class="footer-loc">
+    <span class="footer-loc-place">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span data-lang="ko" class="i">대한민국</span><span data-lang="en" class="i">Republic of Korea</span>
+    </span>
+    <span class="footer-copy">©Copyright Hanilrobotics Co., Ltd. All Rights Reserved</span>
+  </div>
+
+  <div class="footer-info">
+    <div class="footer-info-row">
+      <span data-lang="ko" class="i">주식회사 한일로보틱스 ｜ 대표이사 : 박효종 ｜ 문의 : </span>
+      <span data-lang="en" class="i">Hanilrobotics Co., Ltd. ｜ CEO : Park Hyojong ｜ Contact : </span>
+      <a href="mailto:hjpark@hanilrobotics.kr">hjpark@hanilrobotics.kr</a>
+    </div>
+    <div class="footer-info-row">
+      <span data-lang="ko" class="i">서울특별시 금천구 디지털로10길 78, 1337-14호 (가산동, 가산테라타워)</span>
+      <span data-lang="en" class="i">1337-14, 78 Digital-ro 10-gil, Geumcheon-gu, Seoul, Republic of Korea</span>
+    </div>
+    <div class="footer-info-row">
+      <span data-lang="ko" class="i">사업자등록번호 : 896-81-03988</span>
+      <span data-lang="en" class="i">Business Reg. No. : 896-81-03988</span>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-logo">HANIL ROBOTICS</div>
+    <a href="#hero" class="footer-top-btn">
+      <span class="arrow">↑</span>
+      <span class="txt">TOP</span>
+    </a>
+  </div>
+</footer>
+
+<script>
+  // Lang toggle
+  const body = document.body;
+  const btn = document.getElementById('langToggle');
+  let lang = 'ko';
+  btn.addEventListener('click', () => {
+    lang = lang === 'ko' ? 'en' : 'ko';
+    body.className = 'lang-' + lang;
+    btn.textContent = lang === 'ko' ? 'EN' : 'KO';
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
